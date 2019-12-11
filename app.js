@@ -1,19 +1,31 @@
-const express = require('express')
-const morgan = require('morgan')
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const mysql = require('mysql')
+const bodyParsr = require('body-parser')
+const app = express();
 
-const app = express()
-const orderRoutes = require('./api/routes/order')
-const productRoutes = require('./api/routes/products')
+const users = require('./api/routes/users');
 
-app.use(morgan('dev'))
+app.use(morgan('dev'));
+app.use(cors());
+app.use(bodyParsr.json());
+// Criando a conexão com o DB
+
+var conn = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: process.env.DB_PASSWORD,
+    database: 'book-restaurant'
+})
 // Routes to Handling requests
-app.use('/products',productRoutes)
-app.use('/order',orderRoutes)
+app.use('/users',users);
+
 
 app.use((req,res,next)=> {
-    const error = new Error('Not Found')
-    error.status = 404
-    next(error)
+    const error = new Error('Not Found');
+    error.status = 404;
+    next(error);
 })
 app.use((error, req,res,next)=> {
 res.status(error.status || 500)
@@ -23,4 +35,4 @@ res.json({
     }
 })
 })
-module.exports = app
+module.exports = app;
