@@ -1,0 +1,4 @@
+# API-NODE-MONGO-DB
+REST API SIMPLES 
+
+API Simples em NODE integrada com o banco NOSQL MONGODB
